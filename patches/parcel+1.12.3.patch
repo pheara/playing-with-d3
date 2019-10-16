@@ -1,7 +1,7 @@
-diff --git a/node_modules/parcel-bundler/src/assets/ElmAsset.js b/node_modules/parcel-bundler/src/assets/ElmAsset.js
+diff --git a/node_modules/parcel/src/assets/ElmAsset.js b/node_modules/parcel/src/assets/ElmAsset.js
 index 5f81ebc..3567a59 100644
---- a/node_modules/parcel-bundler/src/assets/ElmAsset.js
-+++ b/node_modules/parcel-bundler/src/assets/ElmAsset.js
+--- a/node_modules/parcel/src/assets/ElmAsset.js
++++ b/node_modules/parcel/src/assets/ElmAsset.js
 @@ -39,7 +39,7 @@ class ElmAsset extends Asset {
        await this.getConfig(['elm.json'], {load: false});
      }
