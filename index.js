@@ -15,6 +15,12 @@ console.log("vegaEmbed: ", vegaEmbed);
 var elmApp = ElmMain.Elm.Main.init({
   node: document.querySelector(".elm-mount")
 });
+elmApp.ports.getRandomViaPorts.subscribe(() => {
+  elmApp.ports.randomViaPortsIn.send(Math.random());
+  setTimeout(() => {
+    elmApp.ports.randomViaPortsIn.send(Math.random());
+  }, 3000);
+});
 console.log(elmApp);
 
 const irisScatterPlotConf = {
