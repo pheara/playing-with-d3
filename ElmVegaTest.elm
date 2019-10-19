@@ -21,6 +21,13 @@ myVis =
     in
     toVegaLite [ data [], bar [], enc [] ]
 
+-- irisVis : Spec
+-- irisVis =
+--     let 
+--         data = data "./"
+--         enc = 
+--     in 
+--     toVegaLite [ data [], bar [], enc [] ]
 
 
 {- The code below is boilerplate for creating a headless Elm module that opens
