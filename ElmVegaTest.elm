@@ -9,6 +9,22 @@ import Platform
 import VegaLite exposing (..)
 
 
+port elmToJS : Spec -> Cmd msg
+
+
+main : Program () Spec msg
+main =
+    let
+        visSpec =
+            irisVis
+    in
+    Platform.worker
+        { init = always ( visSpec, elmToJS visSpec )
+        , update = \_ model -> ( model, Cmd.none )
+        , subscriptions = always Sub.none
+        }
+
+
 irisVis : Spec
 irisVis =
     let
@@ -38,19 +54,3 @@ irisDataPointToJson dataPoint =
         , ( "petalWidth", JE.float dataPoint.petalWidth )
         , ( "species", JE.string <| IrisSet.speciesToStr dataPoint.species )
         ]
-
-
-main : Program () Spec msg
-main =
-    let
-        visSpec =
-            irisVis
-    in
-    Platform.worker
-        { init = always ( visSpec, elmToJS visSpec )
-        , update = \_ model -> ( model, Cmd.none )
-        , subscriptions = always Sub.none
-        }
-
-
-port elmToJS : Spec -> Cmd msg
