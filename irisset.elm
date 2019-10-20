@@ -1,10 +1,23 @@
-module Iris exposing (data)
+module IrisSet exposing (DataPoint, Species, data, speciesToStr)
 
 
 type Species
     = Setosa
     | Versicolor
     | Virginica
+
+
+speciesToStr : Species -> String
+speciesToStr s =
+    case s of
+        Setosa ->
+            "Setosa"
+
+        Versicolor ->
+            "Versicolor"
+
+        Virginica ->
+            "Virginica"
 
 
 type alias DataPoint =
