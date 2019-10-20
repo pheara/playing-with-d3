@@ -3,69 +3,51 @@ port module ElmVegaTest exposing (elmToJS)
 -- from https://github.com/gicentre/elm-vegalite/tree/master/docs/helloWorld
 
 import IrisSet
+import Json.Encode as JE
 import List
 import Platform
 import VegaLite exposing (..)
 
 
-myVis : Spec
-myVis =
+irisVis : Spec
+irisVis =
     let
-        data =
-            dataFromColumns []
-                << dataColumn "a" (strs [ "C", "C", "D", "E" ])
-                << dataColumn "b" (nums [ 2, 7, 1, 2 ])
-
         enc =
             encoding
-                << position X [ pName "a", pMType Nominal ]
-                << position Y [ pName "b", pMType Quantitative, pAggregate opMean ]
+                << position X [ pName "species", pMType Nominal ]
+                << position Y [ pName "sepalLength", pMType Quantitative, pAggregate opMean ]
     in
-    toVegaLite [ data [], bar [], enc [] ]
+    toVegaLite [ irisAsVegaData, bar [], enc [] ]
 
 
-
--- irisDataAsColumns
--- irisAsDataRows =
---     let
---         kvLists = List.map irisToKeyValueList IrisSet.data
---         List.fol
---     in
---         dataFromRows []
-
-
-foo : IrisSet.DataPoint -> List DataRow -> List DataRow
-foo =
-    irisToKeyValueList >> dataRow
+irisAsVegaData : Data
+irisAsVegaData =
+    let
+        json =
+            JE.list irisDataPointToJson IrisSet.data
+    in
+    dataFromJson json []
 
 
-irisToKeyValueList : IrisSet.DataPoint -> List ( String, DataValue )
-irisToKeyValueList dataPoint =
-    [ ( "sepalLength", num dataPoint.sepalLength )
-    , ( "sepalWidth", num dataPoint.sepalWidth )
-    , ( "petalLength", num dataPoint.petalLength )
-    , ( "petalWidth", num dataPoint.petalWidth )
-    , ( "species", str <| IrisSet.speciesToStr dataPoint.species )
-    ]
-
-
-
--- irisVis : Spec
--- irisVis =
---     let
---         data = data "./"
---         enc =
---     in
---     toVegaLite [ data [], bar [], enc [] ]
-{- The code below is boilerplate for creating a headless Elm module that opens
-   an outgoing port to JavaScript and sends the Vega-Lite spec (myVis) to it.
--}
+irisDataPointToJson : IrisSet.DataPoint -> JE.Value
+irisDataPointToJson dataPoint =
+    JE.object
+        [ ( "sepalLength", JE.float dataPoint.sepalLength )
+        , ( "sepalWidth", JE.float dataPoint.sepalWidth )
+        , ( "petalLength", JE.float dataPoint.petalLength )
+        , ( "petalWidth", JE.float dataPoint.petalWidth )
+        , ( "species", JE.string <| IrisSet.speciesToStr dataPoint.species )
+        ]
 
 
 main : Program () Spec msg
 main =
+    let
+        visSpec =
+            irisVis
+    in
     Platform.worker
-        { init = always ( myVis, elmToJS myVis )
+        { init = always ( visSpec, elmToJS visSpec )
         , update = \_ model -> ( model, Cmd.none )
         , subscriptions = always Sub.none
         }
