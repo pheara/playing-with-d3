@@ -32,6 +32,7 @@ sepalScatter =
             encoding
                 << position X [ pName "sepalLength", pMType Quantitative ]
                 << position Y [ pName "sepalWidth", pMType Quantitative ]
+                << color [ mName "species", mMType Nominal ]
     in
     toVegaLite [ irisAsVegaData, circle [], enc [] ]
 
