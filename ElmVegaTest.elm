@@ -16,7 +16,7 @@ main : Program () Spec msg
 main =
     let
         visSpec =
-            irisVis
+            sepalScatter
     in
     Platform.worker
         { init = always ( visSpec, elmToJS visSpec )
@@ -25,8 +25,19 @@ main =
         }
 
 
-irisVis : Spec
-irisVis =
+sepalScatter : Spec
+sepalScatter =
+    let
+        enc =
+            encoding
+                << position X [ pName "sepalLength", pMType Quantitative ]
+                << position Y [ pName "sepalWidth", pMType Quantitative ]
+    in
+    toVegaLite [ irisAsVegaData, circle [], enc [] ]
+
+
+sepalLengthBarChart : Spec
+sepalLengthBarChart =
     let
         enc =
             encoding
